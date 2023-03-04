@@ -91,10 +91,49 @@
                 <h5 class="card-title">Movie title</h5>
               </div>
               <div class="card-footer">
-                <button class="btn btn-primary btn-show-movie">More</button>
+                <button
+                  class="btn btn-primary btn-show-movie"
+                  data-bs-toggle="modal"
+                  data-bs-target="#movie-modal"
+                >
+                  More
+                </button>
                 <button class="btn btn-info btn-add-favorite">+</button>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Movie Modal -->
+    <div
+      class="modal fade"
+      id="movie-modal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="movie-modal-title">Modal title</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body" id="movie-modal-body">...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
           </div>
         </div>
       </div>
