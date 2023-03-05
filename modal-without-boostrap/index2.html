@@ -5,15 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple Modal</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style2.css" />
   </head>
   <body>
     <button id="modalBtn" class="button">Click Here</button>
 
     <div id="simpleModal" class="modal">
       <div class="modal-content">
-        <p>Hello... I am a modal</p>
-        <!-- &times; -->
+        <div class="modal-header">
+          <span class="closeBtn">&times;</span>
+          <h2>Modal Header</h2>
+        </div>
+        <div class="modal-body">
+          <p>Hello... I am a modal</p>
+          <!-- &times; -->
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam,
+            omnis. Dolor id ducimus eaque. Quasi ex iure aspernatur corrupti
+            sequi aut magni minima unde modi voluptatum, eaque debitis, illo
+            nemo?
+          </p>
+        </div>
+        <div class="modal-footer">
+          <h3>Modal Footer</h3>
+        </div>
       </div>
     </div>
     <script src="main.js"></script>
