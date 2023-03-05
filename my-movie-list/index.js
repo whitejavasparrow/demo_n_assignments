@@ -69,3 +69,24 @@ axios
     renderMovieList(movies);
   })
   .catch((err) => console.log(err));
+
+// search
+const searchForm = document.querySelector("#search-form");
+
+searchForm.addEventListener("submit", function onSearchFormSubmitted(event) {
+  event.preventDefault();
+
+  const keyword = document
+    .querySelector("#search-input")
+    .value.trim()
+    .toLowerCase();
+
+  const filteredMovies = movies.filter((el) =>
+    el.title.toLowerCase().includes(keyword)
+  );
+
+  if (filteredMovies.length === 0) {
+    return alert(`您輸入的關鍵字：${keyword} 沒有符合條件的電影`);
+  }
+  renderMovieList(filteredMovies);
+});
