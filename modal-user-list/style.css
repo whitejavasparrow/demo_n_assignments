@@ -1,0 +1,118 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 90%;
+  margin: 0 auto;
+  background-color: #e5d5c6;
+}
+
+* {
+  /*   border: 1px solid blue; */
+  position: relative;
+  font-family: sans-serif;
+  color: #462a13;
+}
+
+#data-panel {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.user {
+  border: 3px solid #724f2f;
+  border-radius: 5px;
+  margin: 2.5px;
+}
+
+.user:hover {
+  background-color: #dd947a;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.user-name {
+  margin: 0;
+  text-align: center;
+  line-height: 1.5rem;
+}
+
+#user-modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  /* the higher the more upfront */
+  height: 100%;
+  width: 100%;
+  /* taking up the whole screen */
+  left: 0;
+  top: 0;
+  overflow: auto;
+  background-color: rgba(black, 0.25);
+  background-color: grey;
+}
+
+#user-modal * {
+  color: white;
+}
+
+.modal-content {
+  background-color: #608fb7;
+  margin: 15% auto;
+  width: 70%;
+  min-width: 325px;
+  /* rwd */
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+  border-radius: 5px;
+  animation-name: modalopen;
+  animation-duration: 1s;
+}
+
+.modal-header h3 {
+  background-color: #aec5d8;
+  margin: 5px;
+  margin-left: 15px;
+  padding: 15px;
+  width: 80%;
+  min-width: 500px;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.modal-footer {
+  background-color: #194569;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.modal-body {
+  padding: 10px 20px;
+}
+
+.close-btn {
+  font-size: 16px;
+}
+
+.close-btn:hover {
+  cursor: pointer;
+}
+
+@keyframes modalopen {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
