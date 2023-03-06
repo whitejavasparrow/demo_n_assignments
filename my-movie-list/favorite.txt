@@ -1,0 +1,8 @@
+removeFromFavorite 函式的核心功能，是傳入 id，經過 movieIndex，將符合結果的電影從 favoriteMovies 移除。因此，removeFromFavorite 有兩步驟：
+
+(1) movie.id 是原始的、從 Index API 擷取到的電影資料；
+(2) movieIndex 是此部電影資料在 movies 陣列中的順序。
+
+比如說，Avengers: Infinity War 的 movie.id 是 4，但因為是第一個被移除收藏的電影， movieIndex 是 0。
+
+在完成移除收藏電影的步驟後，使用 localStorage.setItem，將更新後的電影資料傳回 localStorage（可在 Inspect > Application 找到 localStorage 的細節），並讓 renderMovieList 輸出正確的清單！
