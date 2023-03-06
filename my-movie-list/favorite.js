@@ -26,7 +26,7 @@ function renderMovieList(data) {
           }">More</button>
           <button class="btn btn-danger btn-remove-favorite" data-id="${
             item.id
-          }">+</button>
+          }">&times;</button>
         </div>
       </div>
     </div>
@@ -51,6 +51,20 @@ function showMovieModal(id) {
       POSTER_URL + data.image
     }" alt="movie-poster" class="img-fluid">`;
   });
+}
+
+function removeFromFavorite(id) {
+  if (!movies && !movie.length) {
+    return;
+  }
+
+  const movieIndex = movies.findIndex((movie) => movie.id === id);
+  if (movieIndex === -1) {
+    return;
+  }
+  movies.splice(movieIndex, 1);
+  localStorage.setItem("favoriteMovies", JSON.stringify(movies));
+  renderMovieList(movies);
 }
 
 //listen to data panel
