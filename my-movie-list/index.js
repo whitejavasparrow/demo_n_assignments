@@ -54,10 +54,24 @@ function showMovieModal(id) {
   });
 }
 
+function addToFavorite(id) {
+  const list = JSON.parse(localStorage.getItem("favoriteMovies")) || [];
+  const movie = movies.find((movie) => movie.id === id);
+
+  if (movies.some((movie) => movie.id === id)) {
+    return alert("此電影已經在收藏清單中！");
+  }
+
+  list.push(movie);
+  localStorage.setItem("favoriteMovies", JSON.stringify(list));
+}
+
 // listen to data panel
 dataPanel.addEventListener("click", function onPanelClicked(event) {
   if (event.target.matches(".btn-show-movie")) {
-    showMovieModal(event.target.dataset.id);
+    showMovieModal(Number(event.target.dataset.id));
+  } else if (event.target.matches(".btn-add-favorite")) {
+    addToFavorite(Number(event.target.dataset.id));
   }
 });
 
