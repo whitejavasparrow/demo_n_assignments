@@ -26,7 +26,7 @@ function renderMovieList(data) {
           }">More</button>
           <button class="btn btn-danger btn-remove-favorite" data-id="${
             item.id
-          }">&times;</button>
+          }">X</button>
         </div>
       </div>
     </div>
@@ -54,14 +54,11 @@ function showMovieModal(id) {
 }
 
 function removeFromFavorite(id) {
-  if (!movies && !movie.length) {
-    return;
-  }
+  if (!movies) return;
 
   const movieIndex = movies.findIndex((movie) => movie.id === id);
-  if (movieIndex === -1) {
-    return;
-  }
+  if (movieIndex === -1) return;
+
   movies.splice(movieIndex, 1);
   localStorage.setItem("favoriteMovies", JSON.stringify(movies));
   renderMovieList(movies);
