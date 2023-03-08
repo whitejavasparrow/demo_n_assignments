@@ -1,3 +1,7 @@
+/* * {
+    border: 1px solid blue !important;
+} */
+
 .icon {
     height: 32px;
     width: 32px;
@@ -10,4 +14,23 @@
     margin: 15px 50px;
     display: flex;
     justify-content: flex-end;
+}
+
+.bar-view-list-item {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+    padding-bottom: 7.5px;
+    border-bottom: 1px solid rgb(236, 236, 161);
+}
+
+.bar-view-list-item .item-title {
+    width: 50vw;
+    margin-top: auto;
+    margin-bottom: auto;
+    min-width: 350px;
+}
+
+.bar-view-list-item .btn-show-movie {
+    margin-right: 15px;
 }

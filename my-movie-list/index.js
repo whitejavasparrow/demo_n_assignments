@@ -16,40 +16,70 @@ const viewSwitchContainer = document.querySelector("#view-switch-container");
 const barViewIcon = document.querySelector("#bar-view-icon");
 const gridViewIcon = document.querySelector("#grid-view-icon");
 
-function renderMovieList(data) {
+function renderMovieList(data, view) {
   let rawHTML = "";
-  data.forEach((item) => {
-    // title, image, id
-    rawHTML += `<div class="col-sm-3">
-    <div class="mb-2">
-      <div class="card">
-        <img src="${
-          POSTER_URL + item.image
-        }" class="card-img-top" alt="Movie Poster">
-        <div class="card-body">
-          <h5 class="card-title">${item.title}</h5>
-        </div>
-        <div class="card-footer">
-          <button 
-            class="btn btn-primary 
-            btn-show-movie" 
-            data-bs-toggle="modal" 
-            data-bs-target="#movie-modal" 
-            data-id="${item.id}"
-          >
-            More
-          </button>
-          <button 
-            class="btn btn-info btn-add-favorite" 
-            data-id="${item.id}"
-          >
-            +
-          </button>
+
+  if (view === "gridView") {
+    data.forEach((item) => {
+      // title, image, id
+      rawHTML += `<div class="col-sm-3">
+      <div class="mb-2">
+        <div class="card">
+          <img src="${
+            POSTER_URL + item.image
+          }" class="card-img-top" alt="Movie Poster">
+          <div class="card-body">
+            <h5 class="card-title">${item.title}</h5>
+          </div>
+          <div class="card-footer">
+            <button 
+              class="btn btn-primary 
+              btn-show-movie" 
+              data-bs-toggle="modal" 
+              data-bs-target="#movie-modal" 
+              data-id="${item.id}"
+            >
+              More
+            </button>
+            <button 
+              class="btn btn-info btn-add-favorite" 
+              data-id="${item.id}"
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>`;
-  });
+    </div>`;
+    });
+    // dataPanel.innerHTML = rawHTML;
+  } else if (view === "barView") {
+    data.forEach((item) => {
+      rawHTML += `
+      <div class="bar-view-list-item">
+        <p class="item-title">${item.title}</p>
+
+        <button 
+        class="btn btn-primary 
+        btn-show-movie" 
+        data-bs-toggle="modal" 
+        data-bs-target="#movie-modal" 
+        data-id="${item.id}"
+        >
+        More
+        </button>
+
+        <button 
+        class="btn btn-info btn-add-favorite" 
+        data-id="${item.id}"
+        >
+        +
+        </button>
+      </div>
+      `;
+    });
+    // dataPanel.innerHTML = rawHTML;
+  }
   dataPanel.innerHTML = rawHTML;
 }
 
@@ -144,10 +174,14 @@ axios.get(INDEX_URL).then((response) => {
 viewSwitchContainer.addEventListener("click", (event) => {
   if (event.target.matches("#bar-view-icon")) {
     console.log("Bar view");
+
     renderPaginator(movies.length);
-    renderMovieList(getMoviesByPage(1));
+    renderMovieList(getMoviesByPage(1), "barView");
   } else if (event.target.matches("#grid-view-icon")) {
     dataPanel.innerHTML = "";
+
     console.log("Grid view");
+
+    renderMovieList(getMoviesByPage(1), "gridView");
   }
 });
