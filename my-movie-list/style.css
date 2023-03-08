@@ -1,0 +1,13 @@
+.icon {
+    height: 32px;
+    width: 32px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+#view-switch-container {
+    background-color: rgb(236, 236, 161);
+    margin: 15px 50px;
+    display: flex;
+    justify-content: flex-end;
+}

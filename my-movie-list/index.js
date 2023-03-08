@@ -12,6 +12,10 @@ const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
 const paginator = document.querySelector("#paginator");
 
+const viewSwitchContainer = document.querySelector("#view-switch-container");
+const barViewIcon = document.querySelector("#bar-view-icon");
+const gridViewIcon = document.querySelector("#grid-view-icon");
+
 function renderMovieList(data) {
   let rawHTML = "";
   data.forEach((item) => {
@@ -133,12 +137,17 @@ paginator.addEventListener("click", function onPaginatorClicked(event) {
   renderMovieList(getMoviesByPage(page));
 });
 
-// send request to index api
-axios
-  .get(INDEX_URL)
-  .then((response) => {
-    movies.push(...response.data.results);
+axios.get(INDEX_URL).then((response) => {
+  movies.push(...response.data.results);
+});
+
+viewSwitchContainer.addEventListener("click", (event) => {
+  if (event.target.matches("#bar-view-icon")) {
+    console.log("Bar view");
     renderPaginator(movies.length);
     renderMovieList(getMoviesByPage(1));
-  })
-  .catch((err) => console.log(err));
+  } else if (event.target.matches("#grid-view-icon")) {
+    dataPanel.innerHTML = "";
+    console.log("Grid view");
+  }
+});
