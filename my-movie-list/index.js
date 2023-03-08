@@ -4,6 +4,7 @@ const POSTER_URL = BASE_URL + "/posters/";
 const movies = [];
 
 const dataPanel = document.querySelector("#data-panel");
+const MOVIES_PER_PAGE = 12;
 
 function renderMovieList(data) {
   let rawHTML = "";
@@ -80,7 +81,8 @@ axios
   .get(INDEX_URL)
   .then((response) => {
     movies.push(...response.data.results);
-    renderMovieList(movies);
+    renderPaginator(movies.length);
+    renderMovieList(renderMovieList(getMoviesByPage(1)));
   })
   .catch((err) => console.log(err));
 
@@ -103,4 +105,34 @@ searchForm.addEventListener("submit", function onSearchFormSubmitted(event) {
     return alert(`您輸入的關鍵字：${keyword} 沒有符合條件的電影`);
   }
   renderMovieList(filteredMovies);
+});
+
+function getMoviesByPage(page) {
+  //計算起始 index
+  const startIndex = (page - 1) * MOVIES_PER_PAGE;
+  //回傳切割後的新陣列
+  return movies.slice(startIndex, startIndex + MOVIES_PER_PAGE);
+}
+
+function renderPaginator(amount) {
+  //計算總頁數
+  const numberOfPages = Math.ceil(amount / MOVIES_PER_PAGE);
+  //製作 template
+  let rawHTML = "";
+
+  for (let page = 1; page <= numberOfPages; page++) {
+    rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${page}">${page}</a></li>`;
+  }
+  //放回 HTML
+  paginator.innerHTML = rawHTML;
+}
+
+paginator.addEventListener("click", function onPaginatorClicked(event) {
+  //如果被點擊的不是 a 標籤，結束
+  if (event.target.tagName !== "A") return;
+
+  //透過 dataset 取得被點擊的頁數
+  const page = Number(event.target.dataset.page);
+  //更新畫面
+  renderMovieList(getMoviesByPage(page));
 });
