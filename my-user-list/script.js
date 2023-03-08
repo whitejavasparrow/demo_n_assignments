@@ -11,6 +11,7 @@ const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
 
 let data = [];
+let filteredUsers = [];
 
 const openModal = () => {
   modal.style.display = "block";
@@ -28,7 +29,7 @@ dataPanel.addEventListener("click", function (event) {
     const id = event.target.dataset.id; //
 
     axios.get(SHOW_URL + id).then(function (res) {
-      data = res.data;
+      const data = res.data;
       console.log(res.data);
       const userName = document.querySelector("#modal-user-name");
       const userAge = document.querySelector("#modal-user-age");
@@ -74,17 +75,21 @@ const generateUserList = (data) => {
 axios.get(INDEX_URL).then((res) => {
   const data = res.data.results;
   generateUserList(data);
-});
 
-// searchbar
-searchForm.addEventListener("submit", (event) => {
-  event.preventDefault();
+  // searchbar
+  searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
 
-  const keyword = searchInput.value.trim().toLowerCase();
+    const keyword = searchInput.value.trim().toLowerCase();
 
-  if (!keyword.length) {
-    return alert("請輸入有效字串！");
-  }
+    if (!keyword.length) {
+      return alert("請輸入有效字串！");
+    }
 
-  console.log(data);
+    filteredUsers = data.filter((user) =>
+      user.surname.toLowerCase().includes(keyword)
+    );
+
+    generateUserList(filteredUsers);
+  });
 });

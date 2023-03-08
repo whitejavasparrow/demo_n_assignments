@@ -17,6 +17,10 @@ body {
   color: #462a13;
 }
 
+a {
+    text-decoration: none;
+}
+
 #data-panel {
   display: flex;
   justify-content: center;
@@ -124,8 +128,15 @@ input {
 }
 
 button {
-  background-color: #194569;
+  background-color: #aec5d8;
   color: white;
   padding: 2.5px 7.5px;
   border-radius: 7.5px;
+  font-size: 14px;
+  cursor: pointer; 
+}
+
+.back-home-btn {
+    color: white;
+    font-size: 14px;
 }
