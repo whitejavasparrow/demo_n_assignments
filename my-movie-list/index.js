@@ -55,7 +55,7 @@ function addToFavorite(id) {
 // listen to data panel
 dataPanel.addEventListener("click", function onPanelClicked(event) {
   if (event.target.matches(".btn-show-movie")) {
-    showMovieModal(event.target.dataset.id);
+    showMovieModal(+event.target.dataset.id);
   } else if (event.target.matches(".btn-add-favorite")) {
     addToFavorite(Number(event.target.dataset.id));
   }
