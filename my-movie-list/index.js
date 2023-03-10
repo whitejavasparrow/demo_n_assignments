@@ -16,89 +16,8 @@ const viewSwitchContainer = document.querySelector("#view-switch-container");
 const barViewIcon = document.querySelector("#bar-view-icon");
 const gridViewIcon = document.querySelector("#grid-view-icon");
 
-function renderMovieList(data, view) {
-  let rawHTML = "";
-
-  if (view === "gridView") {
-    data.forEach((item) => {
-      // title, image, id
-      rawHTML += `<div class="col-sm-3">
-      <div class="mb-2">
-        <div class="card">
-          <img src="${
-            POSTER_URL + item.image
-          }" class="card-img-top" alt="Movie Poster">
-          <div class="card-body">
-            <h5 class="card-title">${item.title}</h5>
-          </div>
-          <div class="card-footer">
-            <button 
-              class="btn btn-primary 
-              btn-show-movie" 
-              data-bs-toggle="modal" 
-              data-bs-target="#movie-modal" 
-              data-id="${item.id}"
-            >
-              More
-            </button>
-            <button 
-              class="btn btn-info btn-add-favorite" 
-              data-id="${item.id}"
-            >
-              +
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>`;
-    });
-    // dataPanel.innerHTML = rawHTML;
-  } else if (view === "barView") {
-    data.forEach((item) => {
-      rawHTML += `
-      <div class="bar-view-list-item">
-        <p class="item-title">${item.title}</p>
-
-        <button 
-        class="btn btn-primary 
-        btn-show-movie" 
-        data-bs-toggle="modal" 
-        data-bs-target="#movie-modal" 
-        data-id="${item.id}"
-        >
-        More
-        </button>
-
-        <button 
-        class="btn btn-info btn-add-favorite" 
-        data-id="${item.id}"
-        >
-        +
-        </button>
-      </div>
-      `;
-    });
-    // dataPanel.innerHTML = rawHTML;
-  }
-  dataPanel.innerHTML = rawHTML;
-}
-
-function renderPaginator(amount) {
-  const numberOfPages = Math.ceil(amount / MOVIES_PER_PAGE);
-  let rawHTML = "";
-
-  for (let page = 1; page <= numberOfPages; page++) {
-    rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${page}">${page}</a></li>`;
-  }
-  paginator.innerHTML = rawHTML;
-}
-
-function getMoviesByPage(page) {
-  const data = filteredMovies.length ? filteredMovies : movies;
-  const startIndex = (page - 1) * MOVIES_PER_PAGE;
-
-  return data.slice(startIndex, startIndex + MOVIES_PER_PAGE);
-}
+let currentView = "barView";
+let searchMode = true;
 
 function showMovieModal(id) {
   // get elements
@@ -142,11 +61,12 @@ dataPanel.addEventListener("click", function onPanelClicked(event) {
   }
 });
 
-//listen to search form
+// listen to search form
 searchForm.addEventListener("submit", function onSearchFormSubmitted(event) {
   event.preventDefault();
   const keyword = searchInput.value.trim().toLowerCase();
 
+  searchMode = true;
   filteredMovies = movies.filter((movie) =>
     movie.title.toLowerCase().includes(keyword)
   );
@@ -155,33 +75,115 @@ searchForm.addEventListener("submit", function onSearchFormSubmitted(event) {
     return alert(`您輸入的關鍵字：${keyword} 沒有符合條件的電影`);
   }
 
-  renderPaginator(filteredMovies.length);
-  renderMovieList(getMoviesByPage(1));
+  renderPaginator(filteredMovies.length); // 重製分頁器
+  renderMovieList(getMoviesByPage(1), currentView); // 預設顯示第 1 頁的搜尋結果
 });
 
-// listen to paginator
-paginator.addEventListener("click", function onPaginatorClicked(event) {
-  if (event.target.tagName !== "A") return;
-
-  const page = Number(event.target.dataset.page);
-  renderMovieList(getMoviesByPage(page));
-});
-
-axios.get(INDEX_URL).then((response) => {
-  movies.push(...response.data.results);
-});
-
+// 總電影
 viewSwitchContainer.addEventListener("click", (event) => {
+  renderPaginator(movies.length);
   if (event.target.matches("#bar-view-icon")) {
-    console.log("Bar view");
-
-    renderPaginator(movies.length);
-    renderMovieList(getMoviesByPage(1), "barView");
+    currentView = "barView";
   } else if (event.target.matches("#grid-view-icon")) {
     dataPanel.innerHTML = "";
 
-    console.log("Grid view");
+    currentView = "gridView";
+  }
+  renderMovieList(getMoviesByPage(1), currentView);
+});
 
-    renderMovieList(getMoviesByPage(1), "gridView");
+paginator.addEventListener("click", function (event) {
+  if (event.target.tagName === "A") {
+    const page = +event.target.dataset.page;
+    renderMovieList(getMoviesByPage(page), currentView);
   }
 });
+
+axios.get(INDEX_URL).then((response) => {
+  movies.push(...response.data.results); // deconstruct using three dots (...)
+  // renderMovieList(getMoviesByPage(1), "barView"); // render the data shown on Page 1; by default, render in bar view
+  renderPaginator(movies.length);
+  renderMovieList(getMoviesByPage(1), "barView");
+});
+
+function renderPaginator(numberOfMovies) {
+  const numberOfPages = Math.ceil(numberOfMovies / MOVIES_PER_PAGE);
+  let rawHTML = "";
+
+  for (let page = 1; page <= numberOfPages; page++) {
+    rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${page}">${page}</a></li>`; //
+  }
+  paginator.innerHTML = rawHTML;
+}
+
+function getMoviesByPage(page) {
+  const data = filteredMovies.length ? filteredMovies : movies; // see if there is any favorite movies already in store
+  const startIndex = (page - 1) * MOVIES_PER_PAGE; // (page - 1) offset
+
+  return data.slice(startIndex, startIndex + MOVIES_PER_PAGE);
+} // followed by "renderMoviesList"
+
+function renderMovieList(data, view) {
+  let rawHTML = "";
+
+  if (view === "gridView") {
+    data.forEach((el) => {
+      // title, image, id
+      rawHTML += `<div class="col-sm-3">
+      <div class="mb-2">
+        <div class="card">
+          <img src="${
+            POSTER_URL + el.image
+          }" class="card-img-top" alt="Movie Poster">
+          <div class="card-body">
+            <h5 class="card-title">${el.title}</h5>
+          </div>
+          <div class="card-footer">
+            <button 
+              class="btn btn-primary 
+              btn-show-movie" 
+              data-bs-toggle="modal" 
+              data-bs-target="#movie-modal" 
+              data-id="${el.id}"
+            >
+              More
+            </button>
+            <button 
+              class="btn btn-info btn-add-favorite" 
+              data-id="${el.id}"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+    });
+  } else if (view === "barView") {
+    data.forEach((el) => {
+      rawHTML += `
+      <div class="bar-view-list-item">
+        <p class="item-title">${el.title}</p>
+
+        <button 
+        class="btn btn-primary 
+        btn-show-movie" 
+        data-bs-toggle="modal" 
+        data-bs-target="#movie-modal" 
+        data-id="${el.id}"
+        >
+        More
+        </button>
+
+        <button 
+        class="btn btn-info btn-add-favorite" 
+        data-id="${el.id}"
+        >
+        +
+        </button>
+      </div>
+      `;
+    });
+  }
+  dataPanel.innerHTML = rawHTML;
+}
