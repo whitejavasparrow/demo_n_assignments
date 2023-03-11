@@ -6,3 +6,10 @@ removeFromFavorite 函式的核心功能，是傳入 id，經過 movieIndex，�
 比如說，Avengers: Infinity War 的 movie.id 是 4，但因為是第一個被移除收藏的電影， movieIndex 是 0。
 
 在完成移除收藏電影的步驟後，使用 localStorage.setItem，將更新後的電影資料傳回 localStorage（可在 Inspect > Application 找到 localStorage 的細節），並讓 renderMovieList 輸出正確的清單！
+
+---
+(1) const data = searchInput.value ? filteredMovies : movies;
+renderPaginator(data.length);
+(2) const data = filteredMovies.length ? filteredMovies : movies; // see if there is any favorite movies already in store
+
+重複了兩次，不知道要不要刪除其中一行程式碼

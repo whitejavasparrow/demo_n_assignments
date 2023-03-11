@@ -17,71 +17,11 @@ const barViewIcon = document.querySelector("#bar-view-icon");
 const gridViewIcon = document.querySelector("#grid-view-icon");
 
 let currentView = "barView";
-let searchMode = true;
-
-function showMovieModal(id) {
-  // get elements
-  const modalTitle = document.querySelector("#movie-modal-title");
-  const modalImage = document.querySelector("#movie-modal-image");
-  const modalDate = document.querySelector("#movie-modal-date");
-  const modalDescription = document.querySelector("#movie-modal-description");
-
-  // send request to show api
-  axios.get(INDEX_URL + id).then((response) => {
-    const data = response.data.results;
-
-    // insert data into modal ui
-    modalTitle.innerText = data.title;
-    modalDate.innerText = "Release date: " + data.release_date;
-    modalDescription.innerText = data.description;
-    modalImage.innerHTML = `<img src="${
-      POSTER_URL + data.image
-    }" alt="movie-poster" class="img-fluid">`;
-  });
-}
-
-function addToFavorite(id) {
-  const list = JSON.parse(localStorage.getItem("favoriteMovies")) || [];
-  const movie = movies.find((movie) => movie.id === id);
-
-  if (list.some((movie) => movie.id === id)) {
-    return alert("此電影已經在收藏清單中！");
-  }
-
-  list.push(movie);
-  localStorage.setItem("favoriteMovies", JSON.stringify(list));
-}
-
-// listen to data panel
-dataPanel.addEventListener("click", function onPanelClicked(event) {
-  if (event.target.matches(".btn-show-movie")) {
-    showMovieModal(+event.target.dataset.id);
-  } else if (event.target.matches(".btn-add-favorite")) {
-    addToFavorite(Number(event.target.dataset.id));
-  }
-});
-
-// listen to search form
-searchForm.addEventListener("submit", function onSearchFormSubmitted(event) {
-  event.preventDefault();
-  const keyword = searchInput.value.trim().toLowerCase();
-
-  searchMode = true;
-  filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(keyword)
-  );
-
-  if (filteredMovies.length === 0) {
-    return alert(`您輸入的關鍵字：${keyword} 沒有符合條件的電影`);
-  }
-
-  renderPaginator(filteredMovies.length); // 重製分頁器
-  renderMovieList(getMoviesByPage(1), currentView); // 預設顯示第 1 頁的搜尋結果
-});
 
 // 總電影
 viewSwitchContainer.addEventListener("click", (event) => {
-  renderPaginator(movies.length);
+  const data = filteredMovies.length ? filteredMovies : movies;
+  renderPaginator(data.length);
   if (event.target.matches("#bar-view-icon")) {
     currentView = "barView";
   } else if (event.target.matches("#grid-view-icon")) {
@@ -186,4 +126,65 @@ function renderMovieList(data, view) {
     });
   }
   dataPanel.innerHTML = rawHTML;
+}
+
+// =================================== //
+// listen to data panel
+dataPanel.addEventListener("click", function onPanelClicked(event) {
+  if (event.target.matches(".btn-show-movie")) {
+    showMovieModal(+event.target.dataset.id);
+  } else if (event.target.matches(".btn-add-favorite")) {
+    addToFavorite(+event.target.dataset.id);
+  }
+});
+
+// listen to search form
+searchForm.addEventListener("submit", function onSearchFormSubmitted(event) {
+  event.preventDefault();
+  const keyword = searchInput.value.trim().toLowerCase();
+
+  filteredMovies = movies.filter((movie) =>
+    movie.title.toLowerCase().includes(keyword)
+  );
+
+  renderPaginator(filteredMovies.length); // 重製分頁器
+
+  if (filteredMovies.length === 0) {
+    return alert(`您輸入的關鍵字：${keyword} 沒有符合條件的電影`);
+  }
+
+  renderMovieList(getMoviesByPage(1), currentView); // 預設顯示第 1 頁的搜尋結果
+});
+
+function showMovieModal(id) {
+  // get elements
+  const modalTitle = document.querySelector("#movie-modal-title");
+  const modalImage = document.querySelector("#movie-modal-image");
+  const modalDate = document.querySelector("#movie-modal-date");
+  const modalDescription = document.querySelector("#movie-modal-description");
+
+  // send request to show api
+  axios.get(INDEX_URL + id).then((response) => {
+    const data = response.data.results;
+
+    // insert data into modal ui
+    modalTitle.innerText = data.title;
+    modalDate.innerText = "Release date: " + data.release_date;
+    modalDescription.innerText = data.description;
+    modalImage.innerHTML = `<img src="${
+      POSTER_URL + data.image
+    }" alt="movie-poster" class="img-fluid">`;
+  });
+}
+
+function addToFavorite(id) {
+  const list = JSON.parse(localStorage.getItem("favoriteMovies")) || [];
+  const movie = movies.find((movie) => movie.id === id);
+
+  if (list.some((movie) => movie.id === id)) {
+    return alert("此電影已經在收藏清單中！");
+  }
+
+  list.push(movie);
+  localStorage.setItem("favoriteMovies", JSON.stringify(list));
 }
