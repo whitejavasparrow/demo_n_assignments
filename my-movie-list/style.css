@@ -39,3 +39,7 @@
 .bar-view-list-item .btn-show-movie {
   margin-right: 15px;
 }
+
+button.active {
+  background-color: rgb(236, 236, 161);
+}

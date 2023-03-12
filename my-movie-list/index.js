@@ -22,13 +22,13 @@ let currentView = "barView";
 viewSwitchContainer.addEventListener("click", (event) => {
   const data = filteredMovies.length ? filteredMovies : movies;
   renderPaginator(data.length);
+
   if (event.target.matches("#bar-view-icon")) {
     currentView = "barView";
   } else if (event.target.matches("#grid-view-icon")) {
-    dataPanel.innerHTML = "";
-
     currentView = "gridView";
   }
+
   renderMovieList(getMoviesByPage(1), currentView);
 });
 
@@ -51,7 +51,9 @@ function renderPaginator(numberOfMovies) {
   let rawHTML = "";
 
   for (let page = 1; page <= numberOfPages; page++) {
-    rawHTML += `<li class="page-item"><a class="page-link" href="#" data-page="${page}">${page}</a></li>`; //
+    rawHTML += `
+    <li class="page-item"><a class="page-link" href="#" data-page="${page}">${page}</a></li>
+    `;
   }
   paginator.innerHTML = rawHTML;
 }
