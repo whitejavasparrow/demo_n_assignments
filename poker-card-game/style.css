@@ -18,8 +18,8 @@
 }
 
 .card {
-  width: 192px;
-  height: 233px;
+  width: calc(192px / 2);
+  height: calc(233px / 2);
   border: 1px solid black;
   border-radius: 3px;
   margin: 3px;
@@ -28,9 +28,9 @@
   background-size: cover;
 }
 
-.card-content {
+/* .card-content {
   display: none;
-}
+} */
 
 .card-num,
 .card-num-reversed,
@@ -55,5 +55,5 @@
 .card-suit {
   top: 50%;
   left: 50%;
-  transform: translate(-50%);
+  transform: translate(-50%, -50%);
 }

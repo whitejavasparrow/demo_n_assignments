@@ -2,6 +2,10 @@
 
 const dataPanel = document.querySelector("#data-panel");
 
+let currentNums = [];
+let currentSuits = [];
+let numLog = [];
+
 const generateCards = () => {
   const suits = ["♠", "❤︎", "♦", "♣"];
   let cards = [];
@@ -42,12 +46,42 @@ const cards = generateHTML(shuffleCards(generateCards()));
 
 let clickCnt = 0;
 dataPanel.addEventListener("click", (event) => {
-  const target = event.target;
-  if (target.matches(".card") && clickCnt <= 1) {
-    target.style.backgroundColor = "hotpink";
-    target.style.display = "block";
+  if (clickCnt === 0) {
+    const target1 = event.target;
+    target1.style.backgroundColor = "hotpink";
+    currentNums.push(Number(target1.children[0].children[0].innerText));
+    currentSuits.push(target1.children[0].children[1].innerText);
+
     clickCnt++;
-  } else {
-    target.style.backgroundColor = "transparent";
+  } else if (clickCnt === 1) {
+    const target2 = event.target;
+    target2.style.backgroundColor = "yellow";
+    currentNums.push(Number(target2.children[0].children[0].innerText));
+    currentSuits.push(target2.children[0].children[1].innerText);
+
+    if (
+      currentNums[0] === currentNums[1] &&
+      currentSuits[0] !== currentSuits[1]
+    ) {
+      numLog.push(currentNums[0]);
+      console.log("You have found pairs of ", numLog);
+      clickCnt++;
+    } else {
+      clickCnt = 0;
+      currentNums = [];
+      currentSuits = [];
+      console.log("Pairs not found.");
+    }
+  } else if (clickCnt > 1) {
+    const target1 = event.target;
+    if (target1.matches(".card")) {
+      target1.style.backgroundColor = "hotpink";
+      currentNums = [Number(target1.children[0].children[0].innerText)];
+      currentSuits = [target1.children[0].children[1].innerText];
+      clickCnt = 1;
+    } else {
+      console.log("Something might happen!");
+    }
   }
+  console.log(currentSuits);
 });
