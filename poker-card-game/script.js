@@ -1,5 +1,11 @@
 "use strict";
 
+const background1 =
+  "url(https://images.unsplash.com/photo-1584282000185-87fb204a83d6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=972&q=80)";
+
+const background2 =
+  "url(https://images.unsplash.com/photo-1531131141161-ecdfb1858dd2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80)";
+
 const dataPanel = document.querySelector("#data-panel");
 
 let currentNums = [];
@@ -48,16 +54,19 @@ let clickCnt = 0;
 dataPanel.addEventListener("click", (event) => {
   if (clickCnt === 0) {
     const target1 = event.target;
-    target1.style.backgroundColor = "hotpink";
     currentNums.push(Number(target1.children[0].children[0].innerText));
     currentSuits.push(target1.children[0].children[1].innerText);
+    target1.children[0].style.display = "block";
+    target1.style.backgroundImage = background2;
 
     clickCnt++;
   } else if (clickCnt === 1) {
     const target2 = event.target;
-    target2.style.backgroundColor = "yellow";
+    target2.children[0].style.display = "block";
     currentNums.push(Number(target2.children[0].children[0].innerText));
     currentSuits.push(target2.children[0].children[1].innerText);
+
+    target2.style.backgroundImage = background1;
 
     if (
       currentNums[0] === currentNums[1] &&
@@ -65,17 +74,23 @@ dataPanel.addEventListener("click", (event) => {
     ) {
       numLog.push(currentNums[0]);
       console.log("You have found pairs of ", numLog);
+      target2.style.backgroundImage = background2;
       clickCnt++;
+      target2.style.backgroundImage = background1;
+      target2.style.opacity = 0.5;
     } else {
       clickCnt = 0;
       currentNums = [];
       currentSuits = [];
       console.log("Pairs not found.");
+      target2.style.backgroundImage = background1;
+      target2.children[0].style.display = "none";
     }
   } else if (clickCnt > 1) {
     const target1 = event.target;
     if (target1.matches(".card")) {
       target1.style.backgroundColor = "hotpink";
+      target1.style.backgroundImage = background2;
       currentNums = [Number(target1.children[0].children[0].innerText)];
       currentSuits = [target1.children[0].children[1].innerText];
       clickCnt = 1;
@@ -83,5 +98,4 @@ dataPanel.addEventListener("click", (event) => {
       console.log("Something might happen!");
     }
   }
-  console.log(currentSuits);
 });
