@@ -22,10 +22,7 @@ const closeModal = () => {
 };
 
 dataPanel.addEventListener("click", function (event) {
-  if (
-    event.target.matches(".user-name") ||
-    event.target.matches(".user-avatar")
-  ) {
+  if (event.target.matches(".user-name")) {
     const id = event.target.dataset.id; //
 
     axios.get(SHOW_URL + id).then(function (res) {
@@ -59,8 +56,8 @@ const generateUserList = (data) => {
   data.map(
     (el) =>
       (userListTemplate += `
-      <div class="user">
-        <div class="user-title">
+      <div class="user" >
+        <div class="user-title" data-id=${el.id}>
           <img src="${el.avatar}" class="user-avatar">
         </div>
         <div class="user-body">
