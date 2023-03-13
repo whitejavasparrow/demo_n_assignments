@@ -1,9 +1,9 @@
 "use strict";
 
-const backgroundBack =
+const backgroundOriginal =
   "url(https://images.unsplash.com/photo-1584282000185-87fb204a83d6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=972&q=80)";
 
-const backgroundFront =
+const backgroundFlipped =
   "url(https://images.unsplash.com/photo-1531131141161-ecdfb1858dd2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80)";
 
 const dataPanel = document.querySelector("#data-panel");
@@ -52,12 +52,16 @@ function generateHTML(cards) {
 const cards = generateHTML(shuffleCards(generateCards()));
 
 const showCard = (target) => {
-  target.style.backgroundImage = backgroundFront;
+  target.style.backgroundImage = backgroundFlipped;
   target.children[0].style.display = "block";
+
+  targets.push(target);
+  currentNums.push(+target.children[0].children[0].innerText);
+  currentSuits.push(target.children[0].children[1].innerText);
 };
 
 const hideCard = (target) => {
-  target.style.backgroundImage = backgroundBack;
+  target.style.backgroundImage = backgroundOriginal;
   target.children[0].style.display = "none";
 };
 
@@ -66,19 +70,11 @@ dataPanel.addEventListener("click", (event) => {
   if (clickCnt === 0) {
     const target1 = event.target;
     showCard(target1);
-    targets.push(target1);
-
-    currentNums.push(Number(target1.children[0].children[0].innerText));
-    currentSuits.push(target1.children[0].children[1].innerText);
 
     clickCnt++;
   } else if (clickCnt === 1) {
     const target2 = event.target;
     showCard(target2);
-    targets.push(target2);
-
-    currentNums.push(Number(target2.children[0].children[0].innerText));
-    currentSuits.push(target2.children[0].children[1].innerText);
 
     if (
       currentNums[0] === currentNums[1] &&
@@ -90,20 +86,24 @@ dataPanel.addEventListener("click", (event) => {
       clickCnt++;
     } else {
       targets.forEach((el) => hideCard(el));
-      targets = [];
-
       clickCnt = 0;
+
+      targets = [];
       currentNums = [];
       currentSuits = [];
+
       console.log("Pairs not found.");
     }
   } else if (clickCnt > 1) {
     const target1 = event.target;
     if (target1.matches(".card")) {
-      target1.style.backgroundColor = "hotpink";
-      target1.style.backgroundImage = backgroundBack;
-      currentNums = [Number(target1.children[0].children[0].innerText)];
+      target1.style.backgroundImage = backgroundFlipped;
+      target1.children[0].style.display = "block";
+
+      targets = [target1];
+      currentNums = [+target1.children[0].children[0].innerText];
       currentSuits = [target1.children[0].children[1].innerText];
+
       clickCnt = 1;
     } else {
       console.log("Something might happen!");
