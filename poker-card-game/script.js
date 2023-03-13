@@ -1,9 +1,9 @@
 "use strict";
 
-const background1 =
+const backgroundBack =
   "url(https://images.unsplash.com/photo-1584282000185-87fb204a83d6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=972&q=80)";
 
-const background2 =
+const backgroundFront =
   "url(https://images.unsplash.com/photo-1531131141161-ecdfb1858dd2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80)";
 
 const dataPanel = document.querySelector("#data-panel");
@@ -11,6 +11,7 @@ const dataPanel = document.querySelector("#data-panel");
 let currentNums = [];
 let currentSuits = [];
 let numLog = [];
+let targets = [];
 
 const generateCards = () => {
   const suits = ["♠", "❤︎", "♦", "♣"];
@@ -34,7 +35,7 @@ function generateHTML(cards) {
   let rawHTML = "";
   cards.forEach((el) => {
     const [cardSuit, cardNum] = el.split(" ");
-    const cardColor = ["♠", "❤︎"].includes(el.split(" ")[0]) ? "red" : "black";
+    const cardColor = ["❤︎", "♦"].includes(el.split(" ")[0]) ? "red" : "black";
     rawHTML += `
     <div class="card">
       <div class="card-content">
@@ -50,23 +51,34 @@ function generateHTML(cards) {
 
 const cards = generateHTML(shuffleCards(generateCards()));
 
+const showCard = (target) => {
+  target.style.backgroundImage = backgroundFront;
+  target.children[0].style.display = "block";
+};
+
+const hideCard = (target) => {
+  target.style.backgroundImage = backgroundBack;
+  target.children[0].style.display = "none";
+};
+
 let clickCnt = 0;
 dataPanel.addEventListener("click", (event) => {
   if (clickCnt === 0) {
     const target1 = event.target;
+    showCard(target1);
+    targets.push(target1);
+
     currentNums.push(Number(target1.children[0].children[0].innerText));
     currentSuits.push(target1.children[0].children[1].innerText);
-    target1.children[0].style.display = "block";
-    target1.style.backgroundImage = background2;
 
     clickCnt++;
   } else if (clickCnt === 1) {
     const target2 = event.target;
-    target2.children[0].style.display = "block";
+    showCard(target2);
+    targets.push(target2);
+
     currentNums.push(Number(target2.children[0].children[0].innerText));
     currentSuits.push(target2.children[0].children[1].innerText);
-
-    target2.style.backgroundImage = background1;
 
     if (
       currentNums[0] === currentNums[1] &&
@@ -74,23 +86,22 @@ dataPanel.addEventListener("click", (event) => {
     ) {
       numLog.push(currentNums[0]);
       console.log("You have found pairs of ", numLog);
-      target2.style.backgroundImage = background2;
+
       clickCnt++;
-      target2.style.backgroundImage = background1;
-      target2.style.opacity = 0.5;
     } else {
+      targets.forEach((el) => hideCard(el));
+      targets = [];
+
       clickCnt = 0;
       currentNums = [];
       currentSuits = [];
       console.log("Pairs not found.");
-      target2.style.backgroundImage = background1;
-      target2.children[0].style.display = "none";
     }
   } else if (clickCnt > 1) {
     const target1 = event.target;
     if (target1.matches(".card")) {
       target1.style.backgroundColor = "hotpink";
-      target1.style.backgroundImage = background2;
+      target1.style.backgroundImage = backgroundBack;
       currentNums = [Number(target1.children[0].children[0].innerText)];
       currentSuits = [target1.children[0].children[1].innerText];
       clickCnt = 1;
