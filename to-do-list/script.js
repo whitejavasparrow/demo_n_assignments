@@ -10,10 +10,10 @@ const todos = [
   "Read a book",
   "Buy eggs",
   "Organize office",
-  "Pay bills"
+  "Pay bills",
 ];
 
-for (let todo of todos) {
+for (const todo of todos) {
   addItem(todo);
 }
 
@@ -21,7 +21,7 @@ for (let todo of todos) {
 function addItem(text) {
   input.value = "";
 
-  let newItem = document.createElement("li");
+  const newItem = document.createElement("li");
   newItem.innerHTML = `
     <label for="todo">${text}</label>
     <i class="delete fa fa-trash"></i>
@@ -53,12 +53,12 @@ list.addEventListener("click", function (event) {
   const target = event.target;
 
   if (target.classList.contains("delete")) {
-    let parentElement = target.parentElement;
+    const parentElement = target.parentElement;
     parentElement.remove();
   } else if (target.tagName === "LABEL") {
     // why capitalized?
     target.classList.toggle("checked");
-    let parentElement = target.parentElement;
+    const parentElement = target.parentElement;
     doneList.appendChild(parentElement);
   }
 });
@@ -67,7 +67,11 @@ doneList.addEventListener("click", function (event) {
   const target = event.target;
 
   if (target.classList.contains("delete")) {
-    let parentElement = target.parentElement;
+    const parentElement = target.parentElement;
     parentElement.remove();
+  } else if (target.tagName === "LABEL") {
+    const parentElement = target.parentElement;
+    target.classList.toggle("checked");
+    list.appendChild(parentElement);
   }
 });
