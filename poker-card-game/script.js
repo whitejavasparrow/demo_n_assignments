@@ -96,11 +96,13 @@ dataPanel.addEventListener("click", (event) => {
         currentSuits[0] !== currentSuits[1]
       ) {
         console.log("This is a match!");
+        showCard(currentTargets[0]);
+        showCard(currentTargets[1]);
       } else {
         console.log(currentNums);
         hideCard(currentTargets[0]);
         hideCard(currentTargets[1]);
-        cleanData();
+        clickCnt = 0;
       }
     }
   }
