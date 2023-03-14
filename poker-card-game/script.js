@@ -1,112 +1,73 @@
-"use strict";
+// 初始變數
+const list = document.querySelector("#my-todo");
+const doneList = document.querySelector("#my-done");
+const addBtn = document.querySelector("#add-btn");
+const input = document.querySelector("#new-todo");
 
-const backgroundOriginal =
-  "url(https://images.unsplash.com/photo-1584282000185-87fb204a83d6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=972&q=80)";
+// 資料
+const todos = [
+  "Hit the gym",
+  "Read a book",
+  "Buy eggs",
+  "Organize office",
+  "Pay bills",
+];
 
-const backgroundFlipped =
-  "url(https://images.unsplash.com/photo-1531131141161-ecdfb1858dd2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80)";
-
-const dataPanel = document.querySelector("#data-panel");
-
-let currentNums = [];
-let currentSuits = [];
-let numLog = [];
-let targets = [];
-
-const generateCards = () => {
-  const suits = ["♠", "❤︎", "♦", "♣"];
-  let cards = [];
-  for (const suit of suits) {
-    let cnt = 0;
-    while (cnt < 13) {
-      cards.push(`${suit} ${cnt + 1}`);
-      cnt++;
-    }
-  }
-  return cards;
-};
-
-const shuffleCards = (cards) => {
-  return cards.sort((a, b) => 0.5 - Math.random());
-  // https://dev.to/codebubb/how-to-shuffle-an-array-in-javascript-2ikj
-};
-
-function generateHTML(cards) {
-  let rawHTML = "";
-  cards.forEach((el) => {
-    const [cardSuit, cardNum] = el.split(" ");
-    const cardColor = ["❤︎", "♦"].includes(el.split(" ")[0]) ? "red" : "black";
-    rawHTML += `
-    <div class="card">
-      <div class="card-content">
-        <span class="card-num">${cardNum}</span>
-        <span class="card-suit suit-color-${cardColor}">${cardSuit}</span>
-        <span class="card-num-reversed">${cardNum}</span>
-      </div>
-    </div>
-  `;
-  });
-  dataPanel.innerHTML = rawHTML;
+for (const todo of todos) {
+  addItem(todo);
 }
 
-const cards = generateHTML(shuffleCards(generateCards()));
+// 函式
+function addItem(text) {
+  input.value = "";
 
-const showCard = (target) => {
-  target.style.backgroundImage = backgroundFlipped;
-  target.children[0].style.display = "block";
+  const newItem = document.createElement("li");
+  newItem.innerHTML = `
+    <label for="todo">${text}</label>
+    <i class="delete fa fa-trash"></i>
+  `;
+  list.appendChild(newItem);
+}
 
-  targets.push(target);
-  currentNums.push(+target.children[0].children[0].innerText);
-  currentSuits.push(target.children[0].children[1].innerText);
-};
+// Create
+addBtn.addEventListener("click", function () {
+  const inputValue = input.value;
 
-const hideCard = (target) => {
-  target.style.backgroundImage = backgroundOriginal;
-  target.children[0].style.display = "none";
-};
+  if (inputValue.trim().length > 0) {
+    addItem(inputValue);
+  } else {
+    alert("The addition might be an empty one");
+  }
+});
 
-let clickCnt = 0;
-dataPanel.addEventListener("click", (event) => {
-  if (clickCnt === 0) {
-    const target1 = event.target;
-    showCard(target1);
+input.addEventListener("keyup", function (event) {
+  const inputValue = input.value;
 
-    clickCnt++;
-  } else if (clickCnt === 1) {
-    const target2 = event.target;
-    showCard(target2);
+  if (event.key === "Enter" && inputValue.trim().length > 0) {
+    addItem(inputValue);
+  }
+});
 
-    if (
-      currentNums[0] === currentNums[1] &&
-      currentSuits[0] !== currentSuits[1]
-    ) {
-      numLog.push(currentNums[0]);
-      console.log("You have found pairs of ", numLog);
+// Delete and check
+list.addEventListener("click", function (event) {
+  const target = event.target;
 
-      clickCnt++;
-    } else {
-      targets.forEach((el) => hideCard(el));
-      clickCnt = 0;
+  if (target.classList.contains("delete")) {
+    const parentElement = target.parentElement;
+    parentElement.remove();
+  } else if (target.tagName === "LABEL") {
+    // why capitalized?
+    target.classList.toggle("checked");
+    const parentElement = target.parentElement;
+    doneList.appendChild(parentElement);
+  }
+});
 
-      targets = [];
-      currentNums = [];
-      currentSuits = [];
+doneList.addEventListener("click", function (event) {
+  const target = event.target;
 
-      console.log("Pairs not found.");
-    }
-  } else if (clickCnt > 1) {
-    const target1 = event.target;
-    if (target1.matches(".card")) {
-      target1.style.backgroundImage = backgroundFlipped;
-      target1.children[0].style.display = "block";
-
-      targets = [target1];
-      currentNums = [+target1.children[0].children[0].innerText];
-      currentSuits = [target1.children[0].children[1].innerText];
-
-      clickCnt = 1;
-    } else {
-      console.log("Something might happen!");
-    }
+  if (target.classList.contains("delete")) {
+    const parentElement = target.parentElement;
+    parentElement.remove();
   }
 });
