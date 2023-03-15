@@ -67,46 +67,51 @@ const hideCard = (target) => {
 
 let clickCnt = 0;
 dataPanel.addEventListener("click", (event) => {
-  if (clickCnt === 0) {
-    const target1 = event.target;
-    showCard(target1);
-
-    clickCnt++;
-  } else if (clickCnt === 1) {
-    const target2 = event.target;
-    showCard(target2);
-
-    if (
-      currentNums[0] === currentNums[1] &&
-      currentSuits[0] !== currentSuits[1]
-    ) {
-      numLog.push(currentNums[0]);
-      console.log("You have found pairs of ", numLog);
+  if (event.target.matches(".card")) {
+    if (clickCnt === 0) {
+      const target1 = event.target;
+      showCard(target1);
 
       clickCnt++;
-    } else {
-      targets.forEach((el) => hideCard(el));
-      clickCnt = 0;
+    } else if (clickCnt === 1) {
+      const target2 = event.target;
+      showCard(target2);
 
-      targets = [];
-      currentNums = [];
-      currentSuits = [];
+      if (
+        currentNums[0] === currentNums[1] &&
+        currentSuits[0] !== currentSuits[1]
+      ) {
+        numLog.push(currentNums[0]);
+        console.log("You have found pairs of ", numLog);
 
-      console.log("Pairs not found.");
-    }
-  } else if (clickCnt > 1) {
-    const target1 = event.target;
-    if (target1.matches(".card")) {
-      target1.style.backgroundImage = backgroundFlipped;
-      target1.children[0].style.display = "block";
+        if (targets.length > 2) {
+          targets.forEach((el) => hideCard(el));
+        }
+        clickCnt++;
+      } else {
+        targets.forEach((el) => hideCard(el));
+        clickCnt = 0;
 
-      targets = [target1];
-      currentNums = [+target1.children[0].children[0].innerText];
-      currentSuits = [target1.children[0].children[1].innerText];
+        targets = [];
+        currentNums = [];
+        currentSuits = [];
 
-      clickCnt = 1;
-    } else {
-      console.log("Something might happen!");
+        console.log("Pairs not found.");
+      }
+    } else if (clickCnt > 1) {
+      const target1 = event.target;
+      if (target1.matches(".card")) {
+        target1.style.backgroundImage = backgroundFlipped;
+        target1.children[0].style.display = "block";
+
+        targets = [target1];
+        currentNums = [+target1.children[0].children[0].innerText];
+        currentSuits = [target1.children[0].children[1].innerText];
+
+        clickCnt = 1;
+      } else {
+        console.log("Something might happen!");
+      }
     }
   }
 });
