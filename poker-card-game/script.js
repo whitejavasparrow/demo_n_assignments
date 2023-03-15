@@ -8,10 +8,9 @@ const backgroundFlipped =
 
 const dataPanel = document.querySelector("#data-panel");
 
+let currentTargets = [];
 let currentNums = [];
 let currentSuits = [];
-let numLog = [];
-let targets = [];
 
 const generateCards = () => {
   const suits = ["♠", "❤︎", "♦", "♣"];
@@ -54,10 +53,6 @@ const cards = generateHTML(shuffleCards(generateCards()));
 const showCard = (target) => {
   target.style.backgroundImage = backgroundFlipped;
   target.children[0].style.display = "block";
-
-  targets.push(target);
-  currentNums.push(+target.children[0].children[0].innerText);
-  currentSuits.push(target.children[0].children[1].innerText);
 };
 
 const hideCard = (target) => {
@@ -72,6 +67,13 @@ dataPanel.addEventListener("click", (event) => {
       const target1 = event.target;
       showCard(target1);
 
+let clickCnt = 0;
+dataPanel.addEventListener("click", (event) => {
+  if (event.target.matches(".card")) {
+    if (clickCnt === 0) {
+      const target = event.target;
+      addData(target);
+      showCard(target);
       clickCnt++;
     } else if (clickCnt === 1) {
       const target2 = event.target;
