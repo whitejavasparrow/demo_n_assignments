@@ -8,9 +8,11 @@ const backgroundFlipped =
 
 const dataPanel = document.querySelector("#data-panel");
 
-let currentTargets = [];
+let targets = [];
 let currentNums = [];
 let currentSuits = [];
+
+let numLog = []
 
 const generateCards = () => {
   const suits = ["♠", "❤︎", "♦", "♣"];
@@ -60,24 +62,27 @@ const hideCard = (target) => {
   target.children[0].style.display = "none";
 };
 
-let clickCnt = 0;
-dataPanel.addEventListener("click", (event) => {
-  if (event.target.matches(".card")) {
-    if (clickCnt === 0) {
-      const target1 = event.target;
-      showCard(target1);
+const addData = (target) => {
+  targets.push(target)
+  currentNums.push(+target.children[0].children[0].innerText)
+  currentSuits.push(target.children[0].children[1].innerText)
+
+  if (targets.length > 2) {
+    console.log("not working")
+  }
+}
 
 let clickCnt = 0;
 dataPanel.addEventListener("click", (event) => {
   if (event.target.matches(".card")) {
+    const target = event.target;
     if (clickCnt === 0) {
-      const target = event.target;
       addData(target);
       showCard(target);
       clickCnt++;
     } else if (clickCnt === 1) {
-      const target2 = event.target;
-      showCard(target2);
+      addData(target);
+      showCard(target);
 
       if (
         currentNums[0] === currentNums[1] &&
@@ -85,35 +90,15 @@ dataPanel.addEventListener("click", (event) => {
       ) {
         numLog.push(currentNums[0]);
         console.log("You have found pairs of ", numLog);
-
-        if (targets.length > 2) {
-          targets.forEach((el) => hideCard(el));
-        }
-        clickCnt++;
       } else {
-        targets.forEach((el) => hideCard(el));
-        clickCnt = 0;
-
-        targets = [];
-        currentNums = [];
-        currentSuits = [];
-
+        setTimeout(targets.forEach((el) => hideCard(el)), 1000)
         console.log("Pairs not found.");
       }
-    } else if (clickCnt > 1) {
-      const target1 = event.target;
-      if (target1.matches(".card")) {
-        target1.style.backgroundImage = backgroundFlipped;
-        target1.children[0].style.display = "block";
+      clickCnt = 0;
 
-        targets = [target1];
-        currentNums = [+target1.children[0].children[0].innerText];
-        currentSuits = [target1.children[0].children[1].innerText];
-
-        clickCnt = 1;
-      } else {
-        console.log("Something might happen!");
-      }
+      targets = [];
+      currentNums = [];
+      currentSuits = [];
     }
   }
 });
