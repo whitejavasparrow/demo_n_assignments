@@ -12,7 +12,7 @@ let targets = [];
 let currentNums = [];
 let currentSuits = [];
 
-let numLog = []
+let numLog = [];
 
 const generateCards = () => {
   const suits = ["♠", "❤︎", "♦", "♣"];
@@ -63,14 +63,14 @@ const hideCard = (target) => {
 };
 
 const addData = (target) => {
-  targets.push(target)
-  currentNums.push(+target.children[0].children[0].innerText)
-  currentSuits.push(target.children[0].children[1].innerText)
+  targets.push(target);
+  currentNums.push(+target.children[0].children[0].innerText);
+  currentSuits.push(target.children[0].children[1].innerText);
 
   if (targets.length > 2) {
-    console.log("not working")
+    console.log("not working");
   }
-}
+};
 
 let clickCnt = 0;
 dataPanel.addEventListener("click", (event) => {
@@ -83,6 +83,7 @@ dataPanel.addEventListener("click", (event) => {
     } else if (clickCnt === 1) {
       addData(target);
       showCard(target);
+      clickCnt = 0;
 
       if (
         currentNums[0] === currentNums[1] &&
@@ -90,11 +91,13 @@ dataPanel.addEventListener("click", (event) => {
       ) {
         numLog.push(currentNums[0]);
         console.log("You have found pairs of ", numLog);
+        showCard(targets[0]);
+        showCard(targets[1]);
       } else {
-        setTimeout(targets.forEach((el) => hideCard(el)), 1000)
+        hideCard(targets[0]);
+        hideCard(targets[1]);
         console.log("Pairs not found.");
       }
-      clickCnt = 0;
 
       targets = [];
       currentNums = [];
