@@ -8,9 +8,11 @@ const backgroundFlipped =
 
 const dataPanel = document.querySelector("#data-panel");
 
-let currentTargets = [];
+let targets = [];
 let currentNums = [];
 let currentSuits = [];
+
+let numLog = [];
 
 const generateCards = () => {
   const suits = ["♠", "❤︎", "♦", "♣"];
@@ -50,28 +52,52 @@ function generateHTML(cards) {
 
 const cards = generateHTML(shuffleCards(generateCards()));
 
-/////
+const showCard = (target) => {
+  target.style.backgroundImage = backgroundFlipped;
+  target.children[0].style.display = "block";
+};
+
+const hideCard = (target) => {
+  target.style.backgroundImage = backgroundOriginal;
+  target.children[0].style.display = "none";
+};
+
+const addData = (target) => {
+  targets.push(target);
+  currentNums.push(+target.children[0].children[0].innerText);
+  currentSuits.push(target.children[0].children[1].innerText);
+
+  if (targets.length > 2) {
+    console.log("not working");
+  }
+};
 
 let clickCnt = 0;
-dataPanel.addEventListener("click", function (event) {
-  const target = event.target;
-  if (clickCnt === 0 && target.matches(".card")) {
-    clickCnt++;
+dataPanel.addEventListener("click", (event) => {
+  if (event.target.matches(".card")) {
+    if (clickCnt === 0) {
+      const target = event.target;
+      addData(target);
+      showCard(target);
+      clickCnt++;
+    } else if (clickCnt === 1) {
+      const target = event.target;
+      addData(target);
+      showCard(target);
 
-    currentTargets.push(target);
-    currentNums.push(target.children[0].children[0].textContent);
-    currentSuits.push(target.children[0].children[1].textContent);
-  } else if (clickCnt === 1 && target.matches(".card")) {
-    clickCnt = 0;
-    currentTargets.push(target);
-    currentNums.push(target.children[0].children[0].textContent);
-    currentSuits.push(target.children[0].children[1].textContent);
-
-    if (
-      currentNums[0] === currentNums[1] &&
-      currentSuits[0] !== currentSuits[1]
-    ) {
-      console.log(`There is a match: ${currentNums[0]}`);
+      if (
+        currentNums[0] === currentNums[1] &&
+        currentSuits[0] !== currentSuits[1]
+      ) {
+        console.log("This is a match!");
+        showCard(currentTargets[0]);
+        showCard(currentTargets[1]);
+      } else {
+        console.log(currentNums);
+        hideCard(currentTargets[0]);
+        hideCard(currentTargets[1]);
+        clickCnt = 0;
+      }
     }
   } else if (clickCnt > 1) {
     currentTargets = [target];
