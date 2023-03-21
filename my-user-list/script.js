@@ -21,13 +21,25 @@ const closeModal = () => {
   modal.style.display = "none";
 };
 
+const addToFavorite = (id) => {
+  const list = JSON.parse(localStorage.getItem("favoriteUsers")) || [];
+  const user = data.find((user) => user.id === id);
+  console.log(user);
+
+  if (list.some((user) => user.id === id)) {
+    return alert("已經在收藏清單中！");
+  }
+
+  list.push(user);
+  localStorage.setItem("favoriteUsers", JSON.stringify(list));
+};
+
 dataPanel.addEventListener("click", function (event) {
   if (event.target.matches(".user-name")) {
     const id = event.target.dataset.id; //
 
     axios.get(SHOW_URL + id).then(function (res) {
       const data = res.data;
-      console.log(res.data);
       const userName = document.querySelector("#modal-user-name");
       const userAge = document.querySelector("#modal-user-age");
       const userEmail = document.querySelector("#modal-user-email");
@@ -40,6 +52,9 @@ dataPanel.addEventListener("click", function (event) {
 
       openModal();
     });
+  } else if (event.target.matches(".btn-favorite")) {
+    const id = +event.target.dataset.id;
+    addToFavorite(id);
   }
 });
 
@@ -56,13 +71,14 @@ const generateUserList = (data) => {
   data.map(
     (el) =>
       (userListTemplate += `
-      <div class="user" >
+      <div class="user">
         <div class="user-title" data-id=${el.id}>
           <img src="${el.avatar}" class="user-avatar">
         </div>
         <div class="user-body">
           <p class="user-name" data-id=${el.id}>${el.name}<br>${el.surname} </p>
-        </div>
+          <button class="btn-favorite" data-id="${el.id}">❤</button>
+          </div>
       </div>
   `)
   );
