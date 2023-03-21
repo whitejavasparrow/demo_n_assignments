@@ -29,7 +29,15 @@
   opacity: 0.5;
 }
 
-.card-content {
+.card:hover {
+  background-image: url("https://images.unsplash.com/photo-1531131141161-ecdfb1858dd2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80");
+}
+
+.card:hover .card-content.flipped {
+  display: block;
+}
+
+.card-content.unflipped {
   display: none;
   transition: 3s;
 }
