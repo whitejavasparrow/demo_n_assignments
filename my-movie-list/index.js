@@ -17,6 +17,7 @@ const barViewIcon = document.querySelector("#bar-view-icon");
 const gridViewIcon = document.querySelector("#grid-view-icon");
 
 let currentView = "barView";
+let currentPage = 1;
 
 // 總電影
 viewSwitchContainer.addEventListener("click", (event) => {
@@ -29,12 +30,13 @@ viewSwitchContainer.addEventListener("click", (event) => {
     currentView = "gridView";
   }
 
-  renderMovieList(getMoviesByPage(1), currentView);
+  renderMovieList(getMoviesByPage(currentPage), currentView);
 });
 
 paginator.addEventListener("click", function (event) {
   if (event.target.tagName === "A") {
     const page = +event.target.dataset.page;
+    currentPage = page;
     renderMovieList(getMoviesByPage(page), currentView);
   }
 });
@@ -46,8 +48,8 @@ axios.get(INDEX_URL).then((response) => {
   renderMovieList(getMoviesByPage(1), "barView");
 });
 
-function renderPaginator(numberOfMovies) {
-  const numberOfPages = Math.ceil(numberOfMovies / MOVIES_PER_PAGE);
+function renderPaginator(amount) {
+  const numberOfPages = Math.ceil(amount / MOVIES_PER_PAGE);
   let rawHTML = "";
 
   for (let page = 1; page <= numberOfPages; page++) {
@@ -149,11 +151,13 @@ searchForm.addEventListener("submit", function onSearchFormSubmitted(event) {
     movie.title.toLowerCase().includes(keyword)
   );
 
-  renderPaginator(filteredMovies.length); // 重製分頁器
-
   if (filteredMovies.length === 0) {
     return alert(`您輸入的關鍵字：${keyword} 沒有符合條件的電影`);
   }
+
+  currentPage = 1;
+  renderPaginator(filteredMovies.length);
+  renderMovieList(getMoviesByPage(currentPage));
 
   renderMovieList(getMoviesByPage(1), currentView); // 預設顯示第 1 頁的搜尋結果
 });

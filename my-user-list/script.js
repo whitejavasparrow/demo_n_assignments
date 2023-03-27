@@ -58,6 +58,8 @@ dataPanel.addEventListener("click", function (event) {
   }
 });
 
+// open and close modal
+
 closeModalBtn.addEventListener("click", closeModal);
 
 window.addEventListener("click", function (event) {
