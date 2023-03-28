@@ -8,11 +8,8 @@ const backgroundFlipped =
 
 const dataPanel = document.querySelector("#data-panel");
 
-let targets = [];
-let currentNums = [];
-let currentSuits = [];
-
-let numLog = [];
+let currentTargets = [];
+let currentNumbers = [];
 
 const generateCards = () => {
   const suits = ["♠", "❤︎", "♦", "♣"];
@@ -72,37 +69,28 @@ const addData = (target) => {
   }
 };
 
-let clickCnt = 0;
+let clickCnt = 1;
 dataPanel.addEventListener("click", (event) => {
   if (event.target.matches(".card")) {
-    if (clickCnt === 0) {
-      const target = event.target;
-      addData(target);
-      showCard(target);
-      clickCnt++;
-    } else if (clickCnt === 1) {
-      const target = event.target;
-      addData(target);
-      showCard(target);
-
+    const currentNumber = event.target.children[0].children[0].textContent;
+    const currentTarget = event.target;
+    console.log(currentNumber);
+    currentNumbers.push(currentNumber);
+    currentTargets.push(currentTarget);
+    if (currentNumbers.length % 2 === 0) {
       if (
-        currentNums[0] === currentNums[1] &&
-        currentSuits[0] !== currentSuits[1]
+        currentNumbers[currentNumbers.length - 1] ===
+        currentNumbers[currentNumbers.length - 2]
       ) {
-        console.log("This is a match!");
-        showCard(currentTargets[0]);
-        showCard(currentTargets[1]);
+        showCard(currentTargets[currentTargets.length - 1]);
+        showCard(currentTargets[currentTargets.length - 2]);
       } else {
-        console.log(currentNums);
-        hideCard(currentTargets[0]);
-        hideCard(currentTargets[1]);
-        clickCnt = 0;
+        hideCard(currentTargets[currentTargets.length - 1]);
+        hideCard(currentTargets[currentTargets.length - 2]);
       }
+    } else if (currentNumbers.length % 2 === 1) {
+      showCard(currentTargets[currentTargets.length - 1]);
     }
-  } else if (clickCnt > 1) {
-    currentTargets = [target];
-    currentNums = [target.children[0].children[0].textContent];
-    currentSuits = [target.children[0].children[1].textContent];
-    clickCnt = 1;
+    clickCnt++;
   }
 });
