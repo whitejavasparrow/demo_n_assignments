@@ -11,6 +11,8 @@ const dataPanel = document.querySelector("#data-panel");
 let currentTargets = [];
 let currentNumbers = [];
 
+let score = 0;
+
 const generateCards = () => {
   const suits = ["♠", "❤︎", "♦", "♣"];
   let cards = [];
@@ -82,6 +84,7 @@ dataPanel.addEventListener("click", (event) => {
         currentNumbers[currentNumbers.length - 1] ===
         currentNumbers[currentNumbers.length - 2]
       ) {
+        score += 10;
         showCard(currentTargets[currentTargets.length - 1]);
         showCard(currentTargets[currentTargets.length - 2]);
       } else {
@@ -90,6 +93,9 @@ dataPanel.addEventListener("click", (event) => {
       }
     } else if (currentNumbers.length % 2 === 1) {
       showCard(currentTargets[currentTargets.length - 1]);
+    }
+    if (score >= 260) {
+      alert("You have won 260 points!");
     }
     clickCnt++;
   }
