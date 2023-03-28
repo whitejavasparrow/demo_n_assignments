@@ -9,9 +9,13 @@ const modal = document.querySelector("#user-modal");
 const closeModalBtn = document.querySelector(".close-btn");
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
+const pageContainer = document.querySelector("#page-container");
 
 let data = [];
 let filteredUsers = [];
+
+const USERS_PER_PAGE = 18;
+let currentPage = 1;
 
 const openModal = () => {
   modal.style.display = "block";
@@ -34,6 +38,13 @@ const addToFavorite = (id) => {
   localStorage.setItem("favoriteUsers", JSON.stringify(list));
 };
 
+const generatePaginator = (data) => {
+  let paginator = "";
+  const numberOfPages = Math.ceil(data / USERS_PER_PAGE);
+  numberOfPages.forEach((el) => (paginator += `<li>${el}</li>`));
+  pageContainer.innerHTML = paginator;
+};
+
 dataPanel.addEventListener("click", function (event) {
   if (event.target.matches(".user-name")) {
     const id = event.target.dataset.id; //
@@ -49,6 +60,8 @@ dataPanel.addEventListener("click", function (event) {
       })`;
       userAge.innerText = `Birthday: ${data.birthday} (${data.age})`;
       userEmail.innerText = `based in ${data.region} | email: ${data.email}`;
+
+      generatePaginator(data);
 
       openModal();
     });
