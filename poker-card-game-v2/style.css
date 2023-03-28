@@ -1,0 +1,26 @@
+#cards {
+    display: flex;
+    flex-wrap: wrap;   
+  }
+  .card {
+    box-sizing: border-box;
+    
+    flex: 7% 0 1;
+    height: 8vw;
+    border: 2px solid #e0e0e0;
+    margin: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  .card img {
+    max-width: 30%;
+    align-self: center;
+  }
+  .card p {
+    margin: 3px;
+    font-size: 10px;
+  }
+  .card p:last-child {
+    transform: rotate(180deg);
+  }
