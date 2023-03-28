@@ -105,7 +105,7 @@ button.active {
 
 .page-link:hover,
 .btn-add-favorite:hover {
-  background-color: var(--third-color);
+  background-color: var(A--third-color);
   color: white;
 }
 

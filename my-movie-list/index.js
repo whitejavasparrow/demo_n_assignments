@@ -157,9 +157,7 @@ searchForm.addEventListener("submit", function onSearchFormSubmitted(event) {
 
   currentPage = 1;
   renderPaginator(filteredMovies.length);
-  renderMovieList(getMoviesByPage(currentPage));
-
-  renderMovieList(getMoviesByPage(1), currentView); // 預設顯示第 1 頁的搜尋結果
+  renderMovieList(getMoviesByPage(currentPage), currentView);
 });
 
 function showMovieModal(id) {
