@@ -14,7 +14,7 @@ const paginator = document.querySelector("#paginator");
 let data = [];
 let filteredUsers = [];
 
-const USERS_PER_PAGE = 18;
+const USERS_PER_PAGE = 12;
 let currentPage = 1;
 
 const addToFavorite = (id) => {
@@ -29,6 +29,7 @@ const addToFavorite = (id) => {
   list.push(user);
   localStorage.setItem("favoriteUsers", JSON.stringify(list));
 };
+
 // feature: open and close modal
 const openModal = () => {
   modal.style.display = "block";
@@ -92,7 +93,7 @@ const generateUserList = (data) => {
 };
 
 axios.get(INDEX_URL).then((res) => {
-  data = res.data.results;
+  data = res.data.results; // DO NOT USE CONST HERE!
   generatePaginator(data.length);
   generateUserList(getUsersByPage(1));
 
@@ -110,7 +111,8 @@ axios.get(INDEX_URL).then((res) => {
       user.surname.toLowerCase().includes(keyword)
     );
 
-    generateUserList(filteredUsers);
+    generatePaginator(filteredUsers.length);
+    generateUserList(getUsersByPage(1));
   });
 });
 
@@ -132,6 +134,12 @@ const getUsersByPage = (page) => {
   const targetData = filteredUsers.length ? filteredUsers : data;
   const startIndex = (page - 1) * USERS_PER_PAGE; // (page - 1) offset
 
-  console.log(targetData.slice(startIndex, startIndex + USERS_PER_PAGE));
   return targetData.slice(startIndex, startIndex + USERS_PER_PAGE);
 };
+
+paginator.addEventListener("click", (event) => {
+  if (event.target.tagName === "A") {
+    currentPage = +event.target.dataset.page;
+    generateUserList(getUsersByPage(currentPage));
+  }
+});
