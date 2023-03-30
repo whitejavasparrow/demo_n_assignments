@@ -9,7 +9,7 @@ const modal = document.querySelector("#user-modal");
 const closeModalBtn = document.querySelector(".close-btn");
 const searchForm = document.querySelector("#search-form");
 const searchInput = document.querySelector("#search-input");
-const pageContainer = document.querySelector("#page-container");
+const paginator = document.querySelector("#paginator");
 
 let data = [];
 let filteredUsers = [];
@@ -29,7 +29,6 @@ const addToFavorite = (id) => {
   list.push(user);
   localStorage.setItem("favoriteUsers", JSON.stringify(list));
 };
-
 // feature: open and close modal
 const openModal = () => {
   modal.style.display = "block";
@@ -93,8 +92,9 @@ const generateUserList = (data) => {
 };
 
 axios.get(INDEX_URL).then((res) => {
-  const data = res.data.results;
-  generateUserList(data);
+  data = res.data.results;
+  generatePaginator(data.length);
+  generateUserList(getUsersByPage(1));
 
   // feature: search
   searchForm.addEventListener("submit", (event) => {
@@ -113,3 +113,25 @@ axios.get(INDEX_URL).then((res) => {
     generateUserList(filteredUsers);
   });
 });
+
+// feeature: pagination
+const generatePaginator = (amount) => {
+  const NumberOfPage = Math.ceil(amount / USERS_PER_PAGE);
+
+  let rawHTML = "";
+  for (let page = 1; page <= NumberOfPage; page++) {
+    rawHTML += `
+    <li class="page-item"><a class="page-link" href="#" data-page="${page}">${page}</a></li>
+    `;
+  }
+
+  paginator.innerHTML = rawHTML;
+};
+
+const getUsersByPage = (page) => {
+  const targetData = filteredUsers.length ? filteredUsers : data;
+  const startIndex = (page - 1) * USERS_PER_PAGE; // (page - 1) offset
+
+  console.log(targetData.slice(startIndex, startIndex + USERS_PER_PAGE));
+  return targetData.slice(startIndex, startIndex + USERS_PER_PAGE);
+};
