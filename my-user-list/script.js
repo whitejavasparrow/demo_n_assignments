@@ -17,18 +17,17 @@ let filteredUsers = [];
 const USERS_PER_PAGE = 12;
 let currentPage = 1;
 
-const addToFavorite = (id) => {
-  const list = JSON.parse(localStorage.getItem("favoriteUsers")) || [];
-  const user = data.find((user) => user.id === id);
-  console.log(user);
+// const addToFavorite = (id) => {
+//   const list = JSON.parse(localStorage.getItem("favoriteUsers")) || [];
+//   const user = data.find((user) => user.id === id);
 
-  if (list.some((user) => user.id === id)) {
-    return alert("已經在收藏清單中！");
-  }
+//   if (list.some((user) => user.id === id)) {
+//     return alert("已經在收藏清單中！");
+//   }
 
-  list.push(user);
-  localStorage.setItem("favoriteUsers", JSON.stringify(list));
-};
+//   list.push(user);
+//   localStorage.setItem("favoriteUsers", JSON.stringify(list));
+// };
 
 // feature: open and close modal
 const openModal = () => {
@@ -67,9 +66,9 @@ dataPanel.addEventListener("click", function (event) {
 
       openModal();
     });
-  } else if (event.target.matches(".btn-favorite")) {
-    const id = +event.target.dataset.id;
-    addToFavorite(id);
+    // } else if (event.target.matches(".btn-favorite")) {
+    //   const id = +event.target.dataset.id;
+    //   addToFavorite(id);
   }
 });
 
