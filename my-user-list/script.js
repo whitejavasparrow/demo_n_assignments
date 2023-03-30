@@ -17,14 +17,6 @@ let filteredUsers = [];
 const USERS_PER_PAGE = 18;
 let currentPage = 1;
 
-const openModal = () => {
-  modal.style.display = "block";
-};
-
-const closeModal = () => {
-  modal.style.display = "none";
-};
-
 const addToFavorite = (id) => {
   const list = JSON.parse(localStorage.getItem("favoriteUsers")) || [];
   const user = data.find((user) => user.id === id);
@@ -38,12 +30,22 @@ const addToFavorite = (id) => {
   localStorage.setItem("favoriteUsers", JSON.stringify(list));
 };
 
-const generatePaginator = (data) => {
-  let paginator = "";
-  const numberOfPages = Math.ceil(data / USERS_PER_PAGE);
-  numberOfPages.forEach((el) => (paginator += `<li>${el}</li>`));
-  pageContainer.innerHTML = paginator;
+// feature: open and close modal
+const openModal = () => {
+  modal.style.display = "block";
 };
+
+const closeModal = () => {
+  modal.style.display = "none";
+};
+
+closeModalBtn.addEventListener("click", closeModal);
+
+window.addEventListener("click", function (event) {
+  if (event.target === modal) {
+    closeModal();
+  }
+});
 
 dataPanel.addEventListener("click", function (event) {
   if (event.target.matches(".user-name")) {
@@ -51,33 +53,23 @@ dataPanel.addEventListener("click", function (event) {
 
     axios.get(SHOW_URL + id).then(function (res) {
       const data = res.data;
+      const userAvatar = document.querySelector("#modal-user-avatar");
       const userName = document.querySelector("#modal-user-name");
       const userAge = document.querySelector("#modal-user-age");
       const userEmail = document.querySelector("#modal-user-email");
 
+      userAvatar.src = data.avatar;
       userName.innerText = `${data.name} ${data.surname} (${
         data.gender === "female" ? "She / her / Ms." : "He / his / Mr."
       })`;
       userAge.innerText = `Birthday: ${data.birthday} (${data.age})`;
       userEmail.innerText = `based in ${data.region} | email: ${data.email}`;
 
-      generatePaginator(data);
-
       openModal();
     });
   } else if (event.target.matches(".btn-favorite")) {
     const id = +event.target.dataset.id;
     addToFavorite(id);
-  }
-});
-
-// open and close modal
-
-closeModalBtn.addEventListener("click", closeModal);
-
-window.addEventListener("click", function (event) {
-  if (event.target === modal) {
-    closeModal();
   }
 });
 
@@ -104,7 +96,7 @@ axios.get(INDEX_URL).then((res) => {
   const data = res.data.results;
   generateUserList(data);
 
-  // searchbar
+  // feature: search
   searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
