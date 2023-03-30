@@ -7,13 +7,13 @@ body {
 body {
   width: 90%;
   margin: 0 auto;
-  background-color: #e5d5c6;
+  background-color: #f5f0ed;
 }
 
 * {
   position: relative;
   font-family: sans-serif;
-  color: #462a13;
+  color: #3d5361;
 }
 
 a {
@@ -27,13 +27,13 @@ a {
 }
 
 .user {
-  border: 3px solid #724f2f;
+  border: 3px solid #d6b7b5;
   border-radius: 5px;
   margin: 2.5px;
 }
 
 .user-body:hover {
-  background-color: #dd947a;
+  background-color: #d6b7b5;;
   cursor: pointer;
   border-radius: 2.5px;
 }
@@ -48,6 +48,13 @@ a {
   margin: 0;
   text-align: center;
   line-height: 1.5rem;
+  background-color: #f3d7d4;
+}
+
+.user-name:hover {
+  color: #702c2b;
+  font-weight: 900;
+  transition: 0.3s;
 }
 
 #user-modal {
@@ -61,8 +68,7 @@ a {
   left: 0;
   top: 0;
   overflow: auto;
-  background-color: rgba(black, 0.25);
-  background-color: grey;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 #user-modal * {
@@ -160,6 +166,12 @@ button {
   border-radius: 2.5px;
   border: none;
   padding: 12.5px;
+  color: #f5f0ed;
+  background: #d6b7b5;
+}
+
+.btn-favorite:hover {
+  color: #702c2b;
 }
 
 #paginator {

@@ -58,11 +58,13 @@ dataPanel.addEventListener("click", function (event) {
       const userEmail = document.querySelector("#modal-user-email");
 
       userAvatar.src = data.avatar;
-      userName.innerText = `${data.name} ${data.surname} (${
+      userName.innerHTML = `<span>${data.name} ${
+        data.surname
+      }</span> <span style="font-size: 0.9rem">(${
         data.gender === "female" ? "She / her / Ms." : "He / his / Mr."
-      })`;
-      userAge.innerText = `Birthday: ${data.birthday} (${data.age})`;
-      userEmail.innerText = `based in ${data.region} | email: ${data.email}`;
+      })</span>`;
+      userAge.innerHTML = `<span>Birthday:</span> <span style="color: #3d5361; font-weight: 900;">${data.birthday} (${data.age})</span>`;
+      userEmail.innerHTML = `based in</span> <span style="color: #3d5361; font-weight: 900;">${data.region}</span> | email: ${data.email}`;
 
       openModal();
     });
