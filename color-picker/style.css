@@ -1,0 +1,61 @@
+* {
+  font-family: "微軟正黑體", sans-serif;
+  letter-spacing: 1pt;
+}
+
+.color-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.color-num {
+  margin: 5px;
+  padding: 5px 15px;
+  width: 150px;
+}
+
+.color-block {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 7.5px;
+  border-radius: 5px;
+}
+
+.color-block.rgb-r {
+  background-color: rgb(255, 0, 0);
+}
+
+.color-block.rgb-g {
+  background-color: rgb(0, 255, 0);
+}
+
+.color-block.rgb-b {
+  background-color: rgb(0, 0, 255);
+}
+
+body {
+  background-color: rgb(102, 102, 102);
+}
+
+.hex-container {
+  margin: 0 auto;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  width: 150px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  font-size: 24px;
+}
+
+#btn-submit {
+  background-color: #fcba03;
+  color: #fff;
+  font-size: 24;
+  width: 100%;
+  padding: 5px 15px;
+  margin-top: 12.5px;
+  border-radius: 5px;
+}
